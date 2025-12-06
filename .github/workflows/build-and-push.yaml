@@ -212,15 +212,15 @@ jobs:
             ghcr.io/kholisrag/argocd-ksops-helm-secrets
             quay.io/kholisrag/argocd-ksops-helm-secrets
           flavor: |
-            latest=auto
+            latest=true
+            prefix=v
           tags: |
-            # Semantic versioning for tagged releases - auto generates 'latest'
-            type=semver,enable=true,priority=890,pattern={{version}}
-            # Manual dispatch with custom versions - no latest tag
-            type=raw,enable=${{ github.event_name == 'workflow_dispatch' && inputs.argocd_version != '' }},priority=600,value=v${{ steps.versions.outputs.argocd_version }}${{ steps.tag_suffix.outputs.suffix }}
-            # ArgoCD version tags ONLY for git tag releases (refs/tags/v*)
-            type=raw,enable=${{ startsWith(github.ref, 'refs/tags/v') && steps.versions.outputs.build_revision != '' }},priority=199,value=v${{ steps.versions.outputs.argocd_version }}-${{ steps.versions.outputs.build_revision }}
-            type=raw,enable=${{ startsWith(github.ref, 'refs/tags/v') && steps.versions.outputs.build_revision == '' }},priority=197,value=v${{ steps.versions.outputs.argocd_version }}
+            # Semantic versioning for tagged releases (e.g., v3.2.1 -> v3.2.1)
+            type=semver,enable=true,priority=890,pattern=v{{version}}
+            # ArgoCD version with build revision (e.g., 3.2.1-0)
+            type=raw,enable=${{ steps.versions.outputs.build_revision != '' }},priority=199,value=${{ steps.versions.outputs.argocd_version }}-${{ steps.versions.outputs.build_revision }}
+            # ArgoCD version without build revision (e.g., 3.2.1)
+            type=raw,enable=${{ steps.versions.outputs.build_revision == '' }},priority=197,value=${{ steps.versions.outputs.argocd_version }}
             # SHA-based tags
             type=sha,enable=true,priority=100,format=short
             type=sha,enable=true,priority=50,format=long
@@ -255,6 +255,7 @@ jobs:
             ghcr.io/kholisrag/argocd-ksops-helm-secrets
           flavor: |
             latest=false
+            prefix=v
           tags: |
             # Nightly builds (cron schedule only)
             type=schedule,enable=true,priority=1000,pattern=nightly
@@ -262,8 +263,8 @@ jobs:
             type=schedule,enable=${{ steps.versions.outputs.build_revision == '' }},priority=998,pattern=v${{ steps.versions.outputs.argocd_version }}-nightly
             # Edge tag for main branch push only
             type=edge,enable=${{ github.event_name == 'push' }},priority=700,branch=main
-            type=raw,enable=${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', 'main') && steps.versions.outputs.build_revision != '' }},priority=699,value=v${{ steps.versions.outputs.argocd_version }}_${{ steps.versions.outputs.build_revision }}-edge
-            type=raw,enable=${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', 'main') && steps.versions.outputs.build_revision == '' }},priority=698,value=v${{ steps.versions.outputs.argocd_version }}-edge
+            type=raw,enable=${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', 'main') && steps.versions.outputs.build_revision != '' }},priority=699,value=${{ steps.versions.outputs.argocd_version }}_${{ steps.versions.outputs.build_revision }}-edge
+            type=raw,enable=${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', 'main') && steps.versions.outputs.build_revision == '' }},priority=698,value=${{ steps.versions.outputs.argocd_version }}-edge
             # SHA-based tags (always generated)
             type=sha,priority=100,format=short
             type=sha,priority=50,format=long

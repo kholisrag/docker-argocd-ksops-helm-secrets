@@ -2,7 +2,7 @@ name: "Check Latest Tool Versions"
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 1 * * *"
   workflow_dispatch:
   workflow_call:
     outputs:

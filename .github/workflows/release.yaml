@@ -1,4 +1,4 @@
-name: "Create Release"
+name: "Github Release"
 
 # This workflow creates GitHub releases with comprehensive release notes
 # Features:
@@ -49,25 +49,12 @@ jobs:
         id: versions
         uses: ./.github/actions/extract-versions
 
-      - name: "Get Previous Tag"
-        id: previoustag
-        run: |
-          # Get the previous tag for changelog generation
-          PREVIOUS_TAG=$(git tag --sort=-version:refname | sed -n '2p')
-          if [ -z "$PREVIOUS_TAG" ]; then
-            # If no previous tag, use first commit
-            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
-          fi
-          echo "tag=${PREVIOUS_TAG}" >> $GITHUB_OUTPUT
-          echo "::notice::Previous tag: ${PREVIOUS_TAG}"
-
       - name: "Generate Changelog"
         uses: requarks/changelog-action@v1
         id: changelog
         with:
           token: ${{ github.token }}
           tag: ${{ github.ref_name }}
-          fromTag: ${{ steps.previoustag.outputs.tag }}
           writeToFile: true
           changelogFilePath: CHANGELOG.md
           includeInvalidCommits: false
