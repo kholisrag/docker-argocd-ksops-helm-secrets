@@ -49,12 +49,21 @@ jobs:
         id: versions
         uses: ./.github/actions/extract-versions
 
+      - name: "Get Previous Tag"
+        id: previous-tag
+        run: |
+          # Get the second most recent tag by commit date for comparison
+          PREVIOUS_TAG=$(git tag --sort=-committerdate | sed -n '2p')
+          echo "tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
+          echo "Previous tag: $PREVIOUS_TAG"
+
       - name: "Generate Changelog"
         uses: requarks/changelog-action@v1
         id: changelog
         with:
           token: ${{ github.token }}
-          tag: ${{ github.ref_name }}
+          fromTag: ${{ github.ref_name }}
+          toTag: ${{ steps.previous-tag.outputs.tag }}
           writeToFile: true
           changelogFilePath: CHANGELOG.md
           includeInvalidCommits: false
