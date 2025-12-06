@@ -137,6 +137,7 @@ jobs:
           skip_checkout: false
           disable_globbing: false
           create_branch: false
+          branch: main
 
       - name: "Create GitHub Release"
         uses: softprops/action-gh-release@v2
