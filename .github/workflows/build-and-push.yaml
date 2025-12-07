@@ -269,9 +269,9 @@ jobs:
             prefix=v
           tags: |
             # Nightly builds (cron schedule only)
-            type=schedule,enable=true,priority=1000,pattern=nightly
-            type=schedule,enable=${{ steps.versions.outputs.build_revision != '' }},priority=999,pattern=${{ steps.versions.outputs.argocd_version }}_${{ steps.versions.outputs.build_revision }}-nightly
-            type=schedule,enable=${{ steps.versions.outputs.build_revision == '' }},priority=998,pattern=${{ steps.versions.outputs.argocd_version }}-nightly
+            type=schedule,enable=true,prefix=,priority=1000,pattern=nightly
+            type=schedule,enable=${{ steps.versions.outputs.build_revision != '' }},prefix=,priority=999,pattern=${{ steps.versions.outputs.argocd_version }}_${{ steps.versions.outputs.build_revision }}-nightly
+            type=schedule,enable=${{ steps.versions.outputs.build_revision == '' }},prefix=,priority=998,pattern=${{ steps.versions.outputs.argocd_version }}-nightly
             # Edge tag for main branch push only
             type=edge,enable=${{ github.event_name == 'push' }},prefix=,priority=700,branch=main
             type=raw,enable=${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', 'main') && steps.versions.outputs.build_revision != '' }},priority=699,value=${{ steps.versions.outputs.argocd_version }}_${{ steps.versions.outputs.build_revision }}-edge
