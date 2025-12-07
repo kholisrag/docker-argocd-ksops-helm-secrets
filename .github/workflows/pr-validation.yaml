@@ -111,19 +111,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Calculate Next Semver"
-        id: semver
-        uses: paulhatch/semantic-version@v5.4.0
+      - uses: benjlevesque/short-sha@v3.0
+        id: short-sha
         with:
-          tag_prefix: "v"
-          major_pattern: "(MAJOR)"
-          minor_pattern: "(MINOR)"
-          version_format: "${major}.${minor}.${patch}"
-          bump_each_commit: false
-          search_commit_body: false
-          user_format_type: "csv"
-          # Use the semver type from PR validation
-          change_path: "."
+          length: 7
 
       - name: "Generate RC Version Tag"
         id: rc_tag
@@ -131,15 +122,34 @@ jobs:
           # Get PR number
           PR_NUMBER=${{ github.event.pull_request.number }}
 
-          # Generate RC version: next_version-rc.pr_number.sha_short
-          NEXT_VERSION="${{ steps.semver.outputs.version }}"
-          SHA_SHORT="${{ github.event.pull_request.head.sha }}"
-          SHA_SHORT="${SHA_SHORT:0:7}"
+          # Use ArgoCD version as base
+          ARGOCD_VERSION="${{ steps.versions.outputs.argocd_version }}"
 
-          RC_VERSION="${NEXT_VERSION}-rc.${PR_NUMBER}.${SHA_SHORT}"
+          # Count existing RC tags for this PR to determine the next RC number
+          # List all tags matching pattern v{argocd_version}-rc{number}-pr{pr_number}-*
+          EXISTING_TAGS=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/orgs/${{ github.repository_owner }}/packages/container/$(echo ${{ github.repository }} | cut -d'/' -f2)/versions" \
+            --jq ".[] | select(.metadata.container.tags[] | select(test(\"^v${ARGOCD_VERSION}-rc[0-9]+-pr${PR_NUMBER}-\"))) | .metadata.container.tags[]" 2>/dev/null || echo "")
 
+          # Extract RC numbers and find the highest
+          if [ -z "$EXISTING_TAGS" ]; then
+            RC_NUMBER=1
+          else
+            # Extract rc numbers (e.g., v3.2.1-rc2-pr1-abc1234 -> 2)
+            HIGHEST_RC=$(echo "$EXISTING_TAGS" | grep -oP "v${ARGOCD_VERSION}-rc\K[0-9]+" | sort -n | tail -1)
+            RC_NUMBER=$((HIGHEST_RC + 1))
+          fi
+
+          # Generate RC version: v{argocd_version}-rc{number}-pr{pr_number}
+          RC_VERSION="v${ARGOCD_VERSION}-rc${RC_NUMBER}-pr${PR_NUMBER}"
+
+          echo "rc_number=${RC_NUMBER}" >> $GITHUB_OUTPUT
           echo "rc_version=${RC_VERSION}" >> $GITHUB_OUTPUT
-          echo "::notice::RC Version: ${RC_VERSION}"
+          echo "::notice::RC Version: ${RC_VERSION} (RC build #${RC_NUMBER} for PR #${PR_NUMBER})"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Docker Metadata for RC"
         id: meta
@@ -149,13 +159,27 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            prefix=v
           tags: |
-            type=raw,value=${{ steps.rc_tag.outputs.rc_version }}
-            type=raw,value=pr-${{ github.event.pull_request.number }}
+            # RC version with SHA: v{argocd_version}-rc{number}-pr{pr_number}-{sha_short}
+            type=raw,enable=true,priority=900,value=${{ steps.rc_tag.outputs.rc_version }}-${{ steps.short-sha.outputs.sha }}
+            # RC version without SHA: v{argocd_version}-rc{number}-pr{pr_number}
+            type=raw,enable=true,priority=890,value=${{ steps.rc_tag.outputs.rc_version }}
+            # SHA-based tags
+            type=sha,enable=true,priority=100,format=short
+            type=sha,enable=true,priority=50,format=long
+            # PR number tag for easy reference
+            type=raw,enable=true,priority=10,value=pr-${{ github.event.pull_request.number }}
           labels: |
             org.opencontainers.image.title=ArgoCD with ksops, helm-secrets, and age (RC)
             org.opencontainers.image.description=Release Candidate build from PR #${{ github.event.pull_request.number }}
             org.opencontainers.image.version=${{ steps.rc_tag.outputs.rc_version }}
+            org.opencontainers.image.vendor=kholisrag
+            org.opencontainers.image.url=https://github.com/${{ github.repository }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/blob/main/README.md
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/${{ github.repository }}/main/README.md
             # Tool versions as labels
             tools.argocd.version=${{ steps.versions.outputs.argocd_version }}
@@ -165,6 +189,8 @@ jobs:
             tools.sops.version=${{ steps.versions.outputs.sops_version }}
             tools.kubectl.version=${{ steps.versions.outputs.kubectl_version }}
             tools.vals.version=${{ steps.versions.outputs.vals_version }}
+            tools.static-curl.version=${{ steps.versions.outputs.static_curl_version }}
+            build.revision=${{ steps.versions.outputs.build_revision }}
 
       - name: "Build and Push RC Image"
         uses: docker/build-push-action@v6
@@ -181,6 +207,16 @@ jobs:
           provenance: mode=max
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_REVISION=${{ steps.versions.outputs.build_revision }}
+            ARGOCD_VERSION=v${{ steps.versions.outputs.argocd_version }}
+            KSOPS_VERSION=v${{ steps.versions.outputs.ksops_version }}
+            SOPS_VERSION=${{ steps.versions.outputs.sops_version }}
+            KUBECTL_VERSION=${{ steps.versions.outputs.kubectl_version }}
+            VALS_VERSION=${{ steps.versions.outputs.vals_version }}
+            AGE_VERSION=${{ steps.versions.outputs.age_version }}
+            HELM_SECRETS_VERSION=${{ steps.versions.outputs.helm_secrets_version }}
+            STATIC_CURL_VERSION=${{ steps.versions.outputs.static_curl_version }}
 
       - name: "Extract Primary Image Tag"
         id: get_tag
@@ -194,12 +230,25 @@ jobs:
         with:
           script: |
             const rcVersion = '${{ steps.rc_tag.outputs.rc_version }}';
+            const shortSha = '${{ steps.short-sha.outputs.sha }}';
             const imageName = 'ghcr.io/${{ github.repository }}';
+
+            const rcNumber = '${{ steps.rc_tag.outputs.rc_number }}';
+            const prNumber = '${{ github.event.pull_request.number }}';
 
             const comment = `## 🚀 Release Candidate Image Built
 
             **Version:** \`${rcVersion}\`
-            **Image:** \`${imageName}:${rcVersion}\`
+            **SHA:** \`${shortSha}\`
+            **RC Build:** #${rcNumber} for PR #${prNumber}
+
+            ### 🏷️ Available Tags
+            \`\`\`
+            ${imageName}:${rcVersion}-${shortSha}
+            ${imageName}:${rcVersion}
+            ${imageName}:sha-${shortSha}
+            ${imageName}:pr-${prNumber}
+            \`\`\`
 
             ### 🔧 Tool Versions
             - ArgoCD: \`${{ steps.versions.outputs.argocd_version }}\`
@@ -209,10 +258,11 @@ jobs:
             - sops: \`${{ steps.versions.outputs.sops_version }}\`
             - kubectl: \`${{ steps.versions.outputs.kubectl_version }}\`
             - vals: \`${{ steps.versions.outputs.vals_version }}\`
+            - static-curl: \`${{ steps.versions.outputs.static_curl_version }}\`
 
             ### 📦 Pull Command
             \`\`\`bash
-            docker pull ${imageName}:${rcVersion}
+            docker pull ${imageName}:${rcVersion}-${shortSha}
             \`\`\`
 
             > ⚠️ This is a **Release Candidate** image for testing purposes only. It will not be promoted to production registries.
