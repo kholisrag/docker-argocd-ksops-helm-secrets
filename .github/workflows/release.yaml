@@ -144,7 +144,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body_path: release-notes.md
           draft: false
           prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-alpha') || contains(github.ref_name, '-beta') }}
