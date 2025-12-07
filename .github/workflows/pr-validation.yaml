@@ -214,9 +214,10 @@ jobs:
       - name: "Extract Primary Image Tag"
         id: get_tag
         run: |
-          # Use RC version for E2E testing
-          echo "primary_tag=${{ steps.rc_tag.outputs.rc_version }}" >> $GITHUB_OUTPUT
-          echo "::notice::Primary image tag for E2E: ${{ steps.rc_tag.outputs.rc_version }}"
+          # Use RC version with SHA for E2E testing (the only tag we build)
+          PRIMARY_TAG="${{ steps.rc_tag.outputs.rc_version }}-${{ steps.short-sha.outputs.sha }}"
+          echo "primary_tag=${PRIMARY_TAG}" >> $GITHUB_OUTPUT
+          echo "::notice::Primary image tag for E2E: ${PRIMARY_TAG}"
 
       - name: "Comment on PR"
         uses: actions/github-script@v8
@@ -248,11 +249,6 @@ jobs:
             - kubectl: \`${{ steps.versions.outputs.kubectl_version }}\`
             - vals: \`${{ steps.versions.outputs.vals_version }}\`
             - static-curl: \`${{ steps.versions.outputs.static_curl_version }}\`
-
-            ### 📦 Pull Command
-            \`\`\`bash
-            docker pull ${imageName}:${rcVersion}-${shortSha}
-            \`\`\`
 
             > ⚠️ This is a **Release Candidate** image for testing purposes only. It will not be promoted to production registries.
             `;
