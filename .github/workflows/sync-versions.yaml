@@ -126,7 +126,7 @@ jobs:
           git config --local user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
           git config --local user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
           git add Dockerfile
-          git commit -m "chore: sync Dockerfile versions with .tool-versions
+          git commit -m "chore: sync Dockerfile versions with .tool-versions [skip ci]
 
           - ArgoCD: ${{ steps.read_versions.outputs.argocd }}
           - ksops: ${{ steps.read_versions.outputs.ksops }}
@@ -135,10 +135,7 @@ jobs:
           - sops: ${{ steps.read_versions.outputs.sops }}
           - kubectl: ${{ steps.read_versions.outputs.kubectl }}
           - vals: ${{ steps.read_versions.outputs.vals }}
-          - static-curl: ${{ steps.read_versions.outputs.static_curl }}
-
-
-          skip-checks: true"
+          - static-curl: ${{ steps.read_versions.outputs.static_curl }}"
           git push
 
           echo "" >> $GITHUB_STEP_SUMMARY
