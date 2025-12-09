@@ -387,7 +387,7 @@ jobs:
 
       - name: Update GitHub Checks Status
         if: always()
-        uses: octokit/request-action@v2
+        uses: octokit/request-action@v2.x
         with:
           route: POST /repos/{owner}/{repo}/statuses/{sha}
           owner: ${{ github.repository_owner }}
