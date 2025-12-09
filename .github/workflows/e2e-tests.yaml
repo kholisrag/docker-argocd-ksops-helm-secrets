@@ -385,7 +385,7 @@ jobs:
           echo "- Replica Count: ${{ steps.check-replica-count.outputs.replica_count }}/2" >> $GITHUB_STEP_SUMMARY
           echo "- Environment Variables: ${{ steps.e2e-tests-outcome.outputs.e2e_tests_status == 'passed' && '✅ Passed' || '❌ Failed' }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: Update GitHub Status
+      - name: Update GitHub Checks Status
         if: always()
         uses: octokit/request-action@v2
         with:
