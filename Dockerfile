@@ -1,5 +1,5 @@
 ARG KSOPS_VERSION="v4.4.0"
-ARG ARGOCD_VERSION="v3.2.6"
+ARG ARGOCD_VERSION="v3.3.0"
 # Build revision for custom builds (empty by default, can be 0, 1, 2, -rc1, -beta1, etc.)
 ARG BUILD_REVISION=""
 
