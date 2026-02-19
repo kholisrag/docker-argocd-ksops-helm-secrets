@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.3.1-80f39ce] - 2026-02-19
+### :wrench: Chores
+- [`aa190ed`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/aa190edd78f4fc840b2e39ad4cb7eba525d86c1b) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`67deb22`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/67deb22bdd2dc070f2876ccd9f7ac9516b440676) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`762862b`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/762862b6bd1486dea3b6d39092489791e2c40b87) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`58b31d6`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/58b31d6e152d96b07cd029f38c2eb264754d956e) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`6bbefff`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/6bbefffcfe7d84edcccf2bb44f3855e2f81a52e1) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`6c08d8f`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/6c08d8ffddd5cbd37bb3dfcc03577bf976be21cd) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`fb84dfe`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/fb84dfe6d6e906515fac60579d7b253830316637) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`75c3457`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/75c3457c159592309c6127c4faf97222477acb5a) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`c408877`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/c408877bf4e39a8b7e0955c6d5b1cecef10fd3a4) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`7dbc379`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/7dbc379f8b7e9edb5fb480053d241ca1016e4e46) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`843b2b0`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/843b2b03686612b61d1adb1339ff9b1cf0a95a4e) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`98c97d3`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/98c97d3fcff1693222423f039d5e5c09200adfdc) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`80cec4f`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/80cec4fd84ff2d10e082c18ff9dab3d73046ba0f) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`a2d828d`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/a2d828d6f45c3dfa5e5c027dd125c8e7b78c872e) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`58ae4cc`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/58ae4ccd76db3fc802baf7c31f10e2c2e5a1afda) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`7424ba5`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/7424ba58991900051a4b21dd7ea04f76c8ec09d4) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`6bae75d`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/6bae75db5eae78c4462b6e9e9764cfd3bfe4fb86) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`ed237ea`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/ed237eaf390321fc198781221b17dc8ed5500180) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`ef70a8e`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/ef70a8e2f4874b31733d807107c9acabb3076b0c) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`1bfda8b`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/1bfda8b28352de8be5eae346a7564ca119c5e54f) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`7c78b4a`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/7c78b4a43e58a74f968286edd117a332e6a78c8b) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`71bb794`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/71bb7943761d46b966d0a86c97cce5866463efcf) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`af49bba`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/af49bba00b4cb4fd5cfb4d25aefe8f471ac2f74b) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`94c40ed`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/94c40ed1ac789ca2259ea9ce18b44b8486b9e25f) - sync Dockerfile versions with .tool-versions [skip ci] *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+- [`80f39ce`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/80f39ce7c5755d01c469e66bc55a53e295fdd365) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
+
+
 ## [v3.3.0-af49bba] - 2026-02-12
 ### :wrench: Chores
 - [`aa190ed`](https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/commit/aa190edd78f4fc840b2e39ad4cb7eba525d86c1b) - update .tool-versions after successful E2E tests *(commit by [@kholisrag-content-bumper[bot]](https://github.com/apps/kholisrag-content-bumper))*
@@ -434,3 +463,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v3.3.0-ef70a8e]: https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/compare/v3.2.1-0de9379...v3.3.0-ef70a8e
 [v3.3.0-7c78b4a]: https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/compare/v3.2.1-2df5573...v3.3.0-7c78b4a
 [v3.3.0-af49bba]: https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/compare/v3.2.1-2df5573...v3.3.0-af49bba
+[v3.3.1-80f39ce]: https://github.com/kholisrag/docker-argocd-ksops-helm-secrets/compare/v3.2.1-2df5573...v3.3.1-80f39ce
