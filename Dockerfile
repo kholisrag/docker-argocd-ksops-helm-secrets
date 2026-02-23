@@ -1,5 +1,5 @@
 ARG KSOPS_VERSION="v4.4.0"
-ARG ARGOCD_VERSION="v3.3.1"
+ARG ARGOCD_VERSION="v3.3.2"
 # Build revision for custom builds (empty by default, can be 0, 1, 2, -rc1, -beta1, etc.)
 ARG BUILD_REVISION=""
 
@@ -9,7 +9,7 @@ ARG BUILD_REVISION=""
 FROM quay.io/viaductoss/ksops:$KSOPS_VERSION AS ksops
 
 FROM quay.io/argoproj/argocd:$ARGOCD_VERSION
-ARG SOPS_VERSION=3.11.0
+ARG SOPS_VERSION=3.12.1
 ARG KUBECTL_VERSION=1.35.1
 ARG VALS_VERSION=0.43.5
 ARG AGE_VERSION=1.3.1
